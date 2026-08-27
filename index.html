@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>unemployed</title>
+  <meta name="description" content="unemployed — under construction">
+  <link rel="icon" type="image/webp" href="/logo-un.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    html,body{margin:0;padding:0;background:#fff}
+    *{box-sizing:border-box}
+    body{color:#111;font-family:Poppins,Arial,Helvetica,sans-serif;font-weight:300}
+    a{color:#111;text-decoration:none}
+    a:hover{color:#111}
+    input,textarea,button{font:inherit;color:inherit}
+    input:focus,textarea:focus{outline:none}
+    ::placeholder{color:#c8c8c8}
+
+    .site{position:relative;min-height:100vh;display:flex;flex-direction:column;overflow:hidden;background:#fff;color:#111}
+    .ghost{position:absolute;top:-.14em;right:-.06em;z-index:1;font-size:clamp(170px,30vw,520px);line-height:.8;letter-spacing:-.06em;color:#f4f4f4;pointer-events:none;user-select:none;opacity:0;transform:translateY(-.03em);transition:opacity 1200ms ease,transform 1400ms cubic-bezier(.16,1,.3,1)}
+    .site.entered .ghost{opacity:1;transform:none}
+
+    header{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:28px clamp(24px,5vw,64px)}
+    .logo{display:block;width:clamp(150px,15vw,215px)}
+    .logo img{display:block;width:100%;height:auto}
+    nav{display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px}
+    nav a{font-size:13px;letter-spacing:.04em;color:#a8a8a8;border-bottom:1px solid transparent;padding-bottom:3px;transition:color 240ms ease}
+    nav a.active{color:#111;border-bottom-color:#111}
+
+    main{position:relative;z-index:2;flex:1;display:flex;flex-wrap:wrap;align-items:flex-end;gap:clamp(28px,5vw,72px);padding:clamp(24px,4vw,48px) clamp(24px,5vw,64px) clamp(28px,4vw,54px)}
+    .hero-wrap{flex:1 1 380px;min-width:0}
+    .hero{font-size:clamp(44px,12vw,190px);line-height:.86;letter-spacing:-.055em;font-weight:300;transition:font-size 600ms cubic-bezier(.16,1,.3,1)}
+    .site.contacts .hero{font-size:clamp(38px,7vw,104px)}
+    .word1{opacity:0;transform:translateY(.18em);transition:opacity 750ms ease,transform 900ms cubic-bezier(.16,1,.3,1)}
+    .word2{opacity:0;transform:translateY(.16em);transition:opacity 800ms ease 150ms,transform 950ms cubic-bezier(.16,1,.3,1) 150ms}
+    .site.entered .word1,.site.entered .word2{opacity:1;transform:none}
+    .un{position:relative;display:inline-block;color:#a9a9a9}
+    .strike{position:absolute;left:-.24em;right:-.17em;top:.485em;height:.04em;background:#111;transform:scaleX(0);transform-origin:left;transition:transform 1200ms cubic-bezier(.16,1,.3,1) 300ms}
+    .site.entered .strike{transform:scaleX(1)}
+
+    .contact-panel{display:none;flex:0 1 400px;min-width:0;width:100%;max-width:400px}
+    .site.contacts .contact-panel{display:block}
+    .contact-inner{position:relative}
+    form{display:flex;flex-direction:column;gap:18px;opacity:1;transition:opacity 600ms ease 200ms}
+    form.sent{opacity:0;pointer-events:none}
+    .field{display:flex;flex-direction:column;gap:6px}
+    label{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:#a8a8a8}
+    input,textarea{border:0;border-bottom:1px solid #ddd;background:transparent;padding:6px 0 8px;font-size:15px;letter-spacing:-.01em;width:100%}
+    input:focus,textarea:focus{border-bottom-color:#111}
+    textarea{resize:none}
+    button{align-self:flex-start;margin-top:4px;min-height:40px;padding:0 20px;border:1px solid #111;border-radius:999px;background:#fff;color:#111;font-size:12.5px;letter-spacing:.06em;cursor:pointer;transition:background 200ms ease,color 200ms ease}
+    button:hover{background:#111;color:#fff}
+    .form-strike{position:absolute;left:-6px;right:-6px;top:50%;height:1px;background:#111;transform-origin:left;transform:scaleX(0);transition:transform 900ms cubic-bezier(.16,1,.3,1);pointer-events:none}
+    .contact-inner.submitted .form-strike{transform:scaleX(1)}
+    .sent-message{position:absolute;left:0;right:0;top:calc(50% + 18px);margin:0;font-size:14px;line-height:1.5;letter-spacing:.01em;color:#111;background:#fff;opacity:0;transform:translateY(6px);transition:opacity 600ms ease 650ms,transform 600ms cubic-bezier(.16,1,.3,1) 650ms;pointer-events:none}
+    .contact-inner.submitted .sent-message{opacity:1;transform:none;pointer-events:auto}
+    .sent-message a{color:#111;border-bottom:1px solid #ddd;padding-bottom:1px}
+
+    footer{position:relative;z-index:2;border-top:1px solid #ececec;padding:16px clamp(24px,5vw,64px) 20px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 24px}
+    .built{margin:0;font-size:12px;letter-spacing:.05em;color:#9a9a9a;opacity:0;transition:opacity 700ms ease 750ms}
+    .site.entered .built{opacity:1}
+    .socials{display:flex;align-items:center;gap:16px}
+    .soon{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#a8a8a8;opacity:0;transform:translateX(6px);transition:opacity 300ms ease,transform 400ms cubic-bezier(.16,1,.3,1)}
+    .soon.visible{opacity:1;transform:none}
+    .social{display:inline-flex;align-items:center;color:#111;transform:none;transition:color 260ms ease,transform 400ms cubic-bezier(.16,1,.3,1)}
+    .social.poked{color:#c2c2c2;transform:translateY(-2px)}
+  </style>
+</head>
+<body>
+<div class="site" id="site">
+  <div class="ghost" id="ghost">home</div>
+  <header>
+    <a class="logo" href="#home" aria-label="unemployed — home"><img src="logo-unemployed.webp" alt="unemployed"></a>
+    <nav aria-label="Pages">
+      <a href="#home" data-page="home">home</a>
+      <a href="#about" data-page="about">about</a>
+      <a href="#projects" data-page="projects">projects</a>
+      <a href="#contacts" data-page="contacts">contacts</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="hero-wrap">
+      <div class="hero">
+        <div class="word1"><span class="un">un<span class="strike"></span></span>der</div>
+        <div class="word2">construction</div>
+      </div>
+    </div>
+
+    <div class="contact-panel" id="contactPanel">
+      <div class="contact-inner" id="contactInner">
+        <form id="contactForm">
+          <div class="field"><label for="f-name">name</label><input id="f-name" name="name" type="text" required autocomplete="name"></div>
+          <div class="field"><label for="f-email">email</label><input id="f-email" name="email" type="email" required autocomplete="email"></div>
+          <div class="field"><label for="f-message">message</label><textarea id="f-message" name="message" rows="3" required></textarea></div>
+          <button type="submit">send</button>
+        </form>
+        <div class="form-strike"></div>
+        <p class="sent-message">thank you, but we are not listening here yet — <a href="mailto:ideas@unemployed.work">ideas@unemployed.work</a></p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p class="built">built by unemployed v2026.14</p>
+    <div class="socials">
+      <span class="soon" id="soon">soon</span>
+      <a href="#" class="social" data-social="wa" aria-label="WhatsApp — coming soon">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3.5 20.5l1.6-4.9A8.5 8.5 0 1 1 21 11.5Z"></path><path d="M9 8.6c.5-.3 1 0 1.2.4l.5 1c.2.4.1.7-.2 1-.3.3-.3.5-.1.8.4.7 1.1 1.4 1.8 1.8.3.2.5.2.8-.1.3-.3.6-.4 1-.2l1 .5c.4.2.7.7.4 1.2-.4.7-1.3 1-2.1.8-2.1-.5-4.3-2.7-4.8-4.8-.2-.8.1-1.7.8-2.1Z"></path></svg>
+      </a>
+      <a href="#" class="social" data-social="linkedin" aria-label="LinkedIn — coming soon">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.2" y="3.2" width="17.6" height="17.6" rx="3"></rect><path d="M7.6 10.4v6.2"></path><path d="M7.6 7.6v.1"></path><path d="M11.4 16.6v-6.2"></path><path d="M11.4 12.8c0-1.3.9-2.4 2.3-2.4 1.3 0 2.3 1 2.3 2.4v3.8"></path></svg>
+      </a>
+      <a href="mailto:ideas@unemployed.work" class="social" data-social="email" aria-label="Email ideas@unemployed.work">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.8" y="5.2" width="18.4" height="13.6" rx="2.2"></rect><path d="M3.4 6.6 12 12.9l8.6-6.3"></path></svg>
+      </a>
+    </div>
+  </footer>
+</div>
+<script>
+(function(){
+  const PAGES=['home','about','projects','contacts'];
+  const site=document.getElementById('site');
+  const ghost=document.getElementById('ghost');
+  const nav=[...document.querySelectorAll('nav a[data-page]')];
+  const form=document.getElementById('contactForm');
+  const contactInner=document.getElementById('contactInner');
+  const soon=document.getElementById('soon');
+  const timers={};
+  let enterTimer;
+
+  function sync(){
+    const h=(location.hash||'').replace('#','');
+    const page=PAGES.includes(h)?h:'home';
+    site.classList.remove('entered','contacts');
+    if(page==='contacts') site.classList.add('contacts');
+    ghost.textContent=page;
+    nav.forEach(a=>a.classList.toggle('active',a.dataset.page===page));
+    contactInner.classList.remove('submitted');
+    form.classList.remove('sent');
+    clearTimeout(enterTimer);
+    enterTimer=setTimeout(()=>site.classList.add('entered'),110);
+  }
+
+  function poke(el){
+    const id=el.dataset.social;
+    clearTimeout(timers[id]);
+    el.classList.add('poked');
+    soon.classList.add('visible');
+    timers[id]=setTimeout(()=>{
+      el.classList.remove('poked');
+      if(!document.querySelector('.social.poked')) soon.classList.remove('visible');
+    },1200);
+  }
+
+  document.querySelectorAll('.social').forEach(el=>{
+    el.addEventListener('click',e=>{
+      if(el.dataset.social!=='email') e.preventDefault();
+      poke(el);
+    });
+  });
+
+  form.addEventListener('submit',e=>{
+    e.preventDefault();
+    form.classList.add('sent');
+    contactInner.classList.add('submitted');
+  });
+
+  window.addEventListener('hashchange',sync);
+  sync();
+})();
+</script>
+</body>
+</html>
